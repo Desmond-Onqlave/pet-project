@@ -10,6 +10,7 @@ on:
 
 jobs:
   code-build:
+    permissions: write-all
     strategy:
       matrix:
         go-version: [1.18.x]
