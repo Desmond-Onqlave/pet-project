@@ -68,6 +68,4 @@ jobs:
           name: ${{ github.ref }}
           draft: false
           prerelease: false
-          files: |
-            ./build/linux/onqlave
-            ./build/darwin/onqlave
+          files: ./build/linux/onqlave
