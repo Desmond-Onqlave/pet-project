@@ -17,17 +17,21 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checking out the code
+        id: checkout-the-code
         uses: actions/checkout@v3
 
       - name: Set up Go
+        id: setup-go
         uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go-version }}
 
       - name: Go version
+        id: go-version
         run: go version
 
       - name: Cache go modules
+        id: cache-go-module
         uses: actions/cache@v3
         with:
           path: |
@@ -38,10 +42,48 @@ jobs:
             ${{ runner.os }}-go-${{ matrix.go-version }}-
 
       - name: Verify dependencies
+        id: verify-dependencies
         run: go mod verify
 
-      - name: Build
-        run: go build -v ./...
-
       - name: Run golint
+        id: run-golint
         uses: golangci/golangci-lint-action@v3
+
+      - name: Build CLI
+        id: build-cli
+        run: |
+          GOOS=linux GOARCH=amd64 go build -o ./bin/linux/onqlave .
+          GOOS=darwin GOARCH=amd64 go build -o ./bin/darwin/onqlave .
+
+      - name: Create Release
+        id: create-release
+        uses: actions/create-release@v1.12.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Linux Release Asset
+        id: upload-linux-asset
+        uses: actions/upload-release-asset@v1.1.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          asset_path: ./bin/linux/onqlave
+          asset_name: onqlave
+          asset_content_type: application/octet-stream
+
+      - name: Upload Darwin Release Asset
+        id: upload-darwin-asset
+        uses: actions/upload-release-asset@v1.1.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          asset_path: ./bin/darwin/onqlave
+          asset_name: onqlave
+          asset_content_type: application/octet-stream
