@@ -9,7 +9,7 @@ on:
     types: [published]
 
 jobs:
-  code-build:
+  upload-asset:
     permissions:
       contents: write
     strategy:
