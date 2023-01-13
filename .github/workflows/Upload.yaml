@@ -6,7 +6,7 @@ name: Upload
 
 on:
   release:
-    types: [published]
+    types: [created]
 
 jobs:
   upload-asset:
