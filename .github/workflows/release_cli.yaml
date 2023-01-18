@@ -4,10 +4,16 @@
 
 name: Release
 on:
-  push:
-    tags:
-      - v*
-
+  workflow_call:
+    inputs:
+      DOCKER_IMAGE_TAG:
+        description: 'Docker Image Tag'
+        type: string
+        required: true
+    secrets:
+      DOCKER_IMAGE_TAG:
+        description: 'Docker Image Tag'
+        required: true
 jobs:
   release-tag:
     permissions:
@@ -34,9 +40,8 @@ jobs:
           body: |
             CLI Package Docker Image:
             ```
-            docker pull $NAME:$TAG
-            docker pull ${{ github.GITHUB_REPOSITORY }}:${{ github.GITHUB_REF }} 
-            docker pull $github.GITHUB_REPOSITORY:$github.GITHUB_REF 
+            docker pull ${{ secrets.DOCKER_IMAGE_TAG }}
+            docker pull ${{ inputs.DOCKER_IMAGE_TAG }}
             ```
           tag_name: ${{ github.GITHUB_REF }}
           name: ${{ github.GITHUB_REF }}

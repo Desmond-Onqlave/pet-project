@@ -1,0 +1,13 @@
+name: CI Development
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  release-cli:
+    uses: ./.github/workflows/release_cli.yaml
+    with:
+      DOCKER_IMAGE_TAG: ${{ github.GITHUB_REPOSITORY }}:${{ github.GITHUB_REF }}
+    secrets:
+      DOCKER_IMAGE_TAG: ${{ github.GITHUB_REPOSITORY }}:${{ github.GITHUB_REF }}
