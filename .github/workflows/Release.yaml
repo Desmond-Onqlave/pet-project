@@ -8,10 +8,6 @@ on:
     tags:
       - v*
 
-env:
-  TAG: ${{ github.GITHUB_REF }}
-  NAME: ${{ github.GITHUB_REPOSITORY }}
-
 jobs:
   release-tag:
     permissions:
@@ -21,6 +17,9 @@ jobs:
         go-version: [ 1.18.x ]
         os: [ ubuntu-latest ]
     runs-on: ${{ matrix.os }}
+    env:
+      TAG: ${{ github.GITHUB_REF }}
+      NAME: ${{ github.GITHUB_REPOSITORY }}
     steps:
       - name: Checking out the code
         id: checkout-the-code
@@ -31,13 +30,13 @@ jobs:
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ github.GITHUB_REF }}
-          NAME: ${{ github.GITHUB_REPOSITORY }}
         with:
           body: |
             CLI Package Docker Image:
             ```
-            docker pull ${{ env.NAME }}:${{ env.TAG }}
+            docker pull $NAME:$TAG
+            docker pull ${{ github.GITHUB_REPOSITORY }}:${{ github.GITHUB_REF }} 
+            docker pull $github.GITHUB_REPOSITORY:$github.GITHUB_REF 
             ```
           tag_name: ${{ github.GITHUB_REF }}
           name: ${{ github.GITHUB_REF }}
