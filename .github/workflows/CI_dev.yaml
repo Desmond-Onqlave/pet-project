@@ -6,6 +6,8 @@ on:
 
 jobs:
   release-cli:
+    permissions:
+      contents: write
     uses: ./.github/workflows/release_cli.yaml
     with:
       DOCKER_IMAGE_TAG: ${{ github.GITHUB_REPOSITORY }}:${{ github.GITHUB_REF }}
