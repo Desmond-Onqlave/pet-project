@@ -1,7 +1,3 @@
-#
-# Release workflow
-#
-
 name: Release
 on:
   workflow_call:
@@ -14,18 +10,12 @@ on:
       DOCKER_IMAGE_TAG:
         description: 'Docker Image Tag'
         required: true
+
 jobs:
   release-tag:
     permissions:
       contents: write
-    strategy:
-      matrix:
-        go-version: [ 1.18.x ]
-        os: [ ubuntu-latest ]
-    runs-on: ${{ matrix.os }}
-    env:
-      TAG: ${{ github.GITHUB_REF }}
-      NAME: ${{ github.GITHUB_REPOSITORY }}
+    runs-on: ubuntu-latest
     steps:
       - name: Checking out the code
         id: checkout-the-code
