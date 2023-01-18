@@ -8,6 +8,10 @@ on:
     tags:
       - v*
 
+env:
+  TAG: ${{ github.GITHUB_REF }}
+  NAME: ${{ github.GITHUB_REPOSITORY }}
+
 jobs:
   release-tag:
     permissions:
@@ -31,7 +35,7 @@ jobs:
           body: |
             CLI Package Docker Image:
             ```
-            docker pull ${{ github.GITHUB_REPOSITORY }}:${{ github.GITHUB_REF }}
+            docker pull ${{ env.NAME }}:${{ env.TAG }}
             ```
           tag_name: ${{ github.GITHUB_REF }}
           name: ${{ github.GITHUB_REF }}
