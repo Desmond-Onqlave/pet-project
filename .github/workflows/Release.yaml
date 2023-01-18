@@ -26,14 +26,12 @@ jobs:
         id: create-cli-release
         uses: softprops/action-gh-release@v1
         env:
-          TAG_NAME: ${{ github.GITHUB_REF }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPOSITORY_NAME: ${{ github.GITHUB_REPOSITORY }}
         with:
           body: |
             CLI Package Docker Image:
             ```
-            docker pull ${{ REPOSITORY_NAME }}:${{ $TAG_NAME }}
+            docker pull ${{ github.GITHUB_REPOSITORY }}:${{ github.GITHUB_REF }}
             ```
           tag_name: ${{ github.GITHUB_REF }}
           name: ${{ github.GITHUB_REF }}
