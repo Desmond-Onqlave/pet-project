@@ -21,6 +21,12 @@ jobs:
         id: checkout-the-code
         uses: actions/checkout@v3
 
+      - name: Checking Repo and Tag Name
+        run: |
+          echo ${{ secrets.DOCKER_IMAGE_TAG }}
+          echo ${{ inputs.DOCKER_IMAGE_TAG }}
+          echo ${{ github.GITHUB_REPOSITORY }}:${{ github.GITHUB_REF }}
+
       - name: Create CLI Release
         id: create-cli-release
         uses: softprops/action-gh-release@v1
