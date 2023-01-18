@@ -23,6 +23,8 @@ jobs:
 
       - name: Checking Repo and Tag Name
         run: |
+          echo $GITHUB_REF
+          echo $GITHUB_REPOSITORY
           echo ${{ secrets.DOCKER_IMAGE_TAG }}
           echo ${{ inputs.DOCKER_IMAGE_TAG }}
           echo ${{ github.GITHUB_REPOSITORY }}:${{ github.GITHUB_REF }}
