@@ -22,12 +22,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Checking Repo and Tag Name
+        id: tag-name
         run: |
-          echo $GITHUB_REF
-          echo $GITHUB_REPOSITORY
-          echo ${{ secrets.DOCKER_IMAGE_TAG }}
-          echo ${{ inputs.DOCKER_IMAGE_TAG }}
-          echo ${{ github.GITHUB_REPOSITORY }}:${{ github.GITHUB_REF }}
+          echo "docker_tag=$GITHUB_REPOSITORY:${GITHUB_REF#$"refs/tags/"}" >> $GITHUB_OUTPUT
 
       - name: Create CLI Release
         id: create-cli-release
@@ -38,8 +35,7 @@ jobs:
           body: |
             CLI Package Docker Image:
             ```
-            docker pull ${{ secrets.DOCKER_IMAGE_TAG }}
-            docker pull ${{ inputs.DOCKER_IMAGE_TAG }}
+            docker pull ${{ steps.tag-name.outputs.docker_tag }}
             ```
           tag_name: ${{ github.GITHUB_REF }}
           name: ${{ github.GITHUB_REF }}
